@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const paths = {
 	DIST: path.resolve(__dirname, 'dist'),
@@ -21,7 +22,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(paths.SRC, 'index.html')
-        })
+        }),
+        new ExtractTextPlugin('style.bundle.css')
     ],
     module: {
         rules: [
@@ -30,6 +32,18 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     'babel-loader'
+                ]
+            },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    use: 'css-loader'
+                })
+            },
+            {
+                test: /\.(png|jpeg|jpg)$/,
+                use: [
+                    'file-loader'
                 ]
             }
         ]
